@@ -122,6 +122,7 @@ Each user should only be able to access and modify **their own data**.
 - Demo must show:
   - Creating, viewing, editing, deleting entries
   - Login working with your CRUD system
+  - All team members must speak
 - Reflection includes:
   - What was hardest to implement
   - One bug or issue you solved
