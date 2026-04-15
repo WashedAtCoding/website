@@ -1,77 +1,25 @@
-from flask import Flask, request, redirect, url_for, render_template_string, session
-import sqlite3
+# Before running, make sure to run in the terminal:
+# pip install bcrypt
+# pip install flask
+
+from flask import Flask, request, redirect, url_for, render_template, session
+from database import get_db, init_db
 import bcrypt
 import re
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
 
-# ---------- DATABASE SETUP ----------
-def is_valid_password(password):
-    if (re.search(r"[A-Z]", password) and   # uppercase
-        re.search(r"[a-z]", password) and   # lowercase
-        re.search(r"[0-9]", password) and   # number
-        re.search(r"[^A-Za-z0-9]", password)):  # special char
-        return True
-    return False
-
-def get_db():
-    conn = sqlite3.connect("users.db")
-    conn.row_factory = sqlite3.Row
-    return conn
-
-def init_db():
-    conn = get_db()
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            username TEXT PRIMARY KEY,
-            password TEXT
-        )
-    """)
-    conn.commit()
-    conn.close()
-
 init_db()
 
-# ---------- STYLE ----------
-base_style = """
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-"""
-
-login_page = f"""{base_style}
-<div class="card">
-<h2>Login</h2>
-<form method="POST">
-  <input name="username" placeholder="Username"><br>
-  <input name="password" type="password" placeholder="Password"><br>
-  <button type="submit">Login</button>
-</form>
-<a href="/register">Create an account</a>
-<p class="error">{{{{ error }}}}</p>
-</div>
-"""
-
-register_page = f"""{base_style}
-<div class="card">
-<h2>Register</h2>
-<form method="POST">
-  <input name="username" placeholder="Username"><br>
-  <input name="password" type="password" placeholder="Password"><br>
-  <button type="submit">Sign Up</button>
-</form>
-<a href="/">Back to login</a>
-<p class="error">{{{{ error }}}}</p>
-</div>
-"""
-
-secret_page = f"""{base_style}
-<div class="card">
-<h2>🎉 Secret Room</h2>
-<h3>Welcome, {{{{ username }}}}!</h3>
-<p>You got into the secret room!</p>
-<a href="/logout"><button>Logout</button></a>
-</div>
-"""
+# ---------- PASSWORD VALIDATION ----------
+def is_valid_password(password):
+    return (
+        re.search(r"[A-Z]", password) and
+        re.search(r"[a-z]", password) and
+        re.search(r"[0-9]", password) and
+        re.search(r"[^A-Za-z0-9]", password)
+    )
 
 # ---------- ROUTES ----------
 @app.route("/", methods=["GET", "POST"])
@@ -88,14 +36,13 @@ def login():
         ).fetchone()
         conn.close()
 
-        # user['password'] is bytes in SQLite; check with bcrypt
         if user and bcrypt.checkpw(password.encode("utf-8"), user["password"]):
             session["user"] = username
             return redirect(url_for("secret"))
         else:
             error = "Incorrect username or password"
 
-    return render_template_string(login_page, error=error)
+    return render_template("login.html", error=error)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -111,7 +58,6 @@ def register():
         else:
             conn = get_db()
             try:
-                # Hash password with bcrypt
                 hashed_pw = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
 
                 conn.execute(
@@ -121,22 +67,125 @@ def register():
                 conn.commit()
 
                 return redirect(url_for("login"))
-            except sqlite3.IntegrityError:
+            except:
                 conn.rollback()
-                error = "Username already exists"
-            except Exception:
-                conn.rollback()
-                error = "Unexpected error during registration"
+                error = "Username already exists or error occurred"
             finally:
                 conn.close()
 
-    return render_template_string(register_page, error=error)
+    return render_template("register.html", error=error)
 
 @app.route("/secret")
 def secret():
+    # TODO: RENAME THIS ROUTE TO /dashboard
+
     if "user" not in session:
         return redirect(url_for("login"))
-    return render_template_string(secret_page, username=session["user"])
+
+    # TODO: Connect to the database
+    # conn = get_db()
+
+    # TODO: Get all entries that belong to the logged-in user
+    # Example:
+    # entries = conn.execute(
+    #     "SELECT * FROM entries WHERE user=?",
+    #     (session["user"],)
+    # ).fetchall()
+
+    # TODO: Close the connection
+    # conn.close()
+
+    # TODO: Pass entries into your template
+    # Example:
+    # return render_template("dashboard.html", entries=entries, username=session["user"])
+
+    # TEMPORARY (remove later)
+    return render_template("secret.html", username=session["user"])
+
+
+# ---------- CREATE ----------
+# TODO: Create a route like /create
+# This page should:
+# - Show a form (GET)
+# - Save data to the database (POST)
+# - Redirect back to dashboard
+# NOTE: Remove the triple """ before and after each route to 'uncomment'
+"""
+@app.route("/create", methods=["GET", "POST"])
+def create():
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+        # TODO: Get form data (title, content)
+
+        # TODO: Connect to database
+
+        # TODO: Insert into entries table
+        # IMPORTANT: include session["user"]
+
+        # TODO: Commit and close
+
+        return redirect(url_for("dashboard"))
+
+    return render_template("create.html")
+"""
+
+# ---------- UPDATE ----------
+# TODO: Create a route like /edit/<id>
+# This page should:
+# - Load existing data
+# - Show it in a form
+# - Update the database on submit
+
+"""
+@app.route("/edit/<int:id>", methods=["GET", "POST"])
+def edit(id):
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    # TODO: Connect to database
+
+    # TODO: Get entry WHERE id AND user
+    # This prevents editing other users' data
+
+    # if not entry:
+    #     return "Not allowed"
+
+    if request.method == "POST":
+        # TODO: Get updated form data
+
+        # TODO: Update database
+        # IMPORTANT: include id AND session["user"]
+
+        # TODO: Commit and close
+
+        return redirect(url_for("dashboard"))
+
+    return render_template("edit.html", entry=entry)
+"""
+
+# ---------- DELETE ----------
+# TODO: Create a route like /delete/<id>
+# This should:
+# - Delete an entry from the database
+# - Redirect back to dashboard
+
+"""
+@app.route("/delete/<int:id>")
+def delete(id):
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    # TODO: Connect to database
+
+    # TODO: Delete entry WHERE id AND user
+
+    # TODO: Commit and close
+
+    return redirect(url_for("dashboard"))
+"""
+
 
 @app.route("/logout")
 def logout():
@@ -144,4 +193,5 @@ def logout():
     return redirect(url_for("login"))
 
 # ---------- RUN ----------
-app.run(host="0.0.0.0", port=5000)
+if __name__ == "__main__":
+    app.run(debug=True)
