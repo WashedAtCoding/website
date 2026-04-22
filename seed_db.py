@@ -25,6 +25,11 @@ def seed_database():
         ("bob", "SecurePass456@"),
         ("charlie", "MyPassword789#"),
     ]
+    boober = [
+        ("shood", "Password123!"),
+        ("youtyotu", "SecurePass456@"),
+        ("rpin", "MyPassword789#"),
+    ]
     
     try:
         for username, password in sample_users:

@@ -14,5 +14,11 @@ def init_db():
             password TEXT
         )
     """)
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS goober  (
+            username TEXT PRIMARY KEY,
+            password TEXT
+        )
+    """)
     conn.commit()
     conn.close()
