@@ -25,7 +25,7 @@ def seed_database():
         ("bob", "SecurePass456@"),
         ("charlie", "MyPassword789#"),
     ]
-    boober = [
+    sample_entries = [
         ("shood", "Password123!"),
         ("youtyotu", "SecurePass456@"),
         ("rpin", "MyPassword789#"),
@@ -39,6 +39,14 @@ def seed_database():
                 (username, hashed_pw)
             )
             print(f"Created user: {username}")
+        
+        for title, message in sample_entries:
+            hashed_pw = bcrypt.hashpw(message.encode("utf-8"), bcrypt.gensalt())
+            conn.execute(
+                "INSERT INTO entries (title, message) VALUES (?, ?)",
+                (title, hashed_pw)
+            )
+            print(f"Created user: {title}")
         
         conn.commit()
         print("\nDatabase seeding complete!")
