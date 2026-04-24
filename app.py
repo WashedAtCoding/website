@@ -38,7 +38,7 @@ def login():
 
         if user and bcrypt.checkpw(password.encode("utf-8"), user["password"]):
             session["user"] = username
-            return redirect(url_for("secret"))
+            return redirect(url_for("dashboard"))
         else:
             error = "Incorrect username or password"
 
@@ -75,32 +75,19 @@ def register():
 
     return render_template("register.html", error=error)
 
-@app.route("/secret")
-def secret():
-    # TODO: RENAME THIS ROUTE TO /dashboard
+@app.route("/dashboard")
+def dashboard():
+
 
     if "user" not in session:
         return redirect(url_for("login"))
-
-    # TODO: Connect to the database
-    # conn = get_db()
-
-    # TODO: Get all entries that belong to the logged-in user
-    # Example:
-    # entries = conn.execute(
-    #     "SELECT * FROM entries WHERE user=?",
-    #     (session["user"],)
-    # ).fetchall()
-
-    # TODO: Close the connection
-    # conn.close()
-
-    # TODO: Pass entries into your template
-    # Example:
-    # return render_template("dashboard.html", entries=entries, username=session["user"])
-
-    # TEMPORARY (remove later)
-    return render_template("secret.html", username=session["user"])
+    conn = get_db()
+    entries = conn.execute(
+        "SELECT * FROM entries",
+        # (session["user"],)
+    ).fetchall()
+    conn.close()
+    return render_template("dashboard.html", entries=entries, username=session["user"])
 
 
 # ---------- CREATE ----------
