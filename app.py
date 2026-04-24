@@ -85,12 +85,12 @@ def secret():
     # TODO: Connect to the database
     # conn = get_db()
 
-    # TODO: Get all entries that belong to the logged-in user
-    # Example:
-    # entries = conn.execute(
-    #     "SELECT * FROM entries WHERE user=?",
-    #     (session["user"],)
-    # ).fetchall()
+    TODO: Get all entries that belong to the logged-in user
+    Example:
+    entries = conn.execute(
+        "SELECT * FROM entries WHERE user=?",
+        (session["user"],)
+    ).fetchall()
 
     # TODO: Close the connection
     # conn.close()
