@@ -46,7 +46,7 @@ def seed_database():
                 "INSERT INTO entries (title, message) VALUES (?, ?)",
                 (title, hashed_pw)
             )
-            print(f"Created user: {title}")
+            print(f"Created entry: {title}")
         
         conn.commit()
         print("\nDatabase seeding complete!")
