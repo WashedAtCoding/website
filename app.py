@@ -104,13 +104,28 @@ def create():
         return redirect(url_for("login"))
 
     if request.method == "POST":
+        title = request.form["title"].strip()
+        message = request.form["message"].strip()
         # TODO: Get form data (title, content)
 
         # TODO: conn = get_db()
-
+        conn = get_db()
         # TODO: Insert into entries table
         # IMPORTANT: include session["user"]
+        try:
 
+            conn.execute(
+                "INSERT INTO entries (title, message) VALUES (?, ?)",
+                (title, message)
+            )
+            conn.commit()
+
+            return redirect(url_for("dashboard"))
+        except:
+            conn.rollback()
+            error = "Username already exists or error occurred"
+        finally:
+            conn.close()
         # TODO: Commit and close
 
         return redirect(url_for("dashboard"))
