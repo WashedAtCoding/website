@@ -120,10 +120,8 @@ def create():
             )
             conn.commit()
 
-            return redirect(url_for("dashboard"))
         except:
             conn.rollback()
-            error = "Username already exists or error occurred"
         finally:
             conn.close()
         # TODO: Commit and close
