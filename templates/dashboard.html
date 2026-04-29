@@ -8,7 +8,7 @@
 
 <h3>Welcome, {{ username }}!</h3>
 
-<a href="{{ url_for('create') }}">Create New Entry</a>
+<a href="/create">Create New Entry</a>
 <br><br>
 
 {% if entries %}
@@ -16,8 +16,8 @@
         <div>
             <h3>{{ entry['title'] }}</h3>
             <p>{{ entry['content'] }}</p>
-            <a href="{{ url_for('edit', id=entry['id']) }}">Edit</a>
-            <a href="{{ url_for('delete', id=entry['id']) }}">Delete</a>
+            <a href="/edit/{{ entry['id'] }}">Edit</a>
+            <a href="/delete/{{ entry['id'] }}">Delete</a>
         </div>
         <hr>
     {% endfor %}
@@ -27,6 +27,6 @@
 
 <br>
 
-<a href="{{ url_for('logout') }}"><button>Logout</button></a>
+<a href="/logout"><button>Logout</button></a>
 
 {% endblock %}
