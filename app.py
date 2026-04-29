@@ -83,20 +83,18 @@ def dashboard():
         return redirect(url_for("login"))
     conn = get_db()
     entries = conn.execute(
-        "SELECT * FROM entries",
-        # (session["user"],)
+        "SELECT id, title, message AS content FROM entries WHERE user=?",
+        (session["user"],)
     ).fetchall()
     conn.close()
     return render_template("dashboard.html", entries=entries, username=session["user"])
 
 
 # ---------- CREATE ----------
-# TODO: Create a route like /create
 # This page should:
 # - Show a form (GET)
 # - Save data to the database (POST)
 # - Redirect back to dashboard
-# NOTE: Remove the triple """ before and after each route to 'uncomment'
 
 @app.route("/create", methods=["GET", "POST"])
 def create():
@@ -104,14 +102,16 @@ def create():
         return redirect(url_for("login"))
 
     if request.method == "POST":
-        # TODO: Get form data (title, content)
+        title = request.form["title"].strip()
+        content = request.form["content"].strip()
 
-        # TODO: conn = get_db()
-
-        # TODO: Insert into entries table
-        # IMPORTANT: include session["user"]
-
-        # TODO: Commit and close
+        conn = get_db()
+        conn.execute(
+            "INSERT INTO entries (title, message, user) VALUES (?, ?, ?)",
+            (title, content, session["user"])
+        )
+        conn.commit()
+        conn.close()
 
         return redirect(url_for("dashboard"))
 
@@ -119,59 +119,73 @@ def create():
 
 
 # ---------- UPDATE ----------
-# TODO: Create a route like /edit/<id>
 # This page should:
 # - Load existing data
 # - Show it in a form
 # - Update the database on submit
 
-"""
 @app.route("/edit/<int:id>", methods=["GET", "POST"])
 def edit(id):
     if "user" not in session:
         return redirect(url_for("login"))
 
-    # TODO: Connect to database
+    conn = get_db()
+    entry = conn.execute(
+        "SELECT id, title, message AS content FROM entries WHERE id=? AND user=?",
+        (id, session["user"])
+    ).fetchone()
 
-    # TODO: Get entry WHERE id AND user
-    # This prevents editing other users' data
-
-    # if not entry:
-    #     return "Not allowed"
+    if not entry:
+        conn.close()
+        return "Not allowed"
 
     if request.method == "POST":
-        # TODO: Get updated form data
+        title = request.form["title"].strip()
+        content = request.form["content"].strip()
 
-        # TODO: Update database
-        # IMPORTANT: include id AND session["user"]
-
-        # TODO: Commit and close
+        conn.execute(
+            "UPDATE entries SET title=?, message=? WHERE id=? AND user=?",
+            (title, content, id, session["user"])
+        )
+        conn.commit()
+        conn.close()
 
         return redirect(url_for("dashboard"))
 
+    conn.close()
     return render_template("edit.html", entry=entry)
-"""
 
 # ---------- DELETE ----------
-# TODO: Create a route like /delete/<id>
 # This should:
 # - Delete an entry from the database
 # - Redirect back to dashboard
 
-"""
-@app.route("/delete/<int:id>")
+@app.route("/delete/<int:id>", methods=["GET", "POST"])
 def delete(id):
     if "user" not in session:
         return redirect(url_for("login"))
 
-    # TODO: Connect to database
+    conn = get_db()
+    entry = conn.execute(
+        "SELECT id, title, message AS content FROM entries WHERE id=? AND user=?",
+        (id, session["user"])
+    ).fetchone()
 
-    # TODO: Delete entry WHERE id AND user
+    if not entry:
+        conn.close()
+        return "Not allowed"
 
-    # TODO: Commit and close
+    if request.method == "POST":
+        conn.execute(
+            "DELETE FROM entries WHERE id=? AND user=?",
+            (id, session["user"])
+        )
+        conn.commit()
+        conn.close()
+        return redirect(url_for("dashboard"))
 
-    return redirect(url_for("dashboard"))
-"""
+    conn.close()
+    return render_template("delete.html", entry=entry)
 
 
 @app.route("/logout")

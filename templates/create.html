@@ -3,19 +3,12 @@
 {% block content %}
 <h2>Create New Entry</h2>
 
-<!-- TODO: Create a form that sends a POST request -->
 <form method="POST">
-<input name="title" placeholder="title"><br>
-  <input name="content" type="password" placeholder="content"><br>
-  <button type="submit">save</button>
-    <!-- TODO: Add input for title -->
-    
-    <!-- TODO: Add input for content -->
-
-    <!-- TODO: Add submit button -->
-
+  <input name="title" placeholder="Title"><br>
+  <textarea name="content" placeholder="Content"></textarea><br>
+  <button type="submit">Save</button>
 </form>
 
-<!-- TODO: Add a link back to dashboard -->
+<a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
 
 {% endblock %}
