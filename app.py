@@ -105,7 +105,7 @@ def create():
 
     if request.method == "POST":
         title = request.form["title"].strip()
-        message = request.form["message"].strip()
+        content = request.form["content"].strip()
         # TODO: Get form data (title, content)
 
         # TODO: conn = get_db()
@@ -115,8 +115,8 @@ def create():
         try:
 
             conn.execute(
-                "INSERT INTO entries (title, message) VALUES (?, ?)",
-                (title, message)
+                "INSERT INTO entries (title, content) VALUES (?, ?)",
+                (title, content)
             )
             conn.commit()
 

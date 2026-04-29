@@ -17,7 +17,7 @@ def init_db():
         CREATE TABLE IF NOT EXISTS entries (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT,
-            message TEXT,
+            content TEXT,
             user TEXT
         )
     """)
