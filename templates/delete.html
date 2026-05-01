@@ -3,12 +3,12 @@
 {% block content %}
 <h2>Delete Entry</h2>
 
-<p>Are you sure you want to delete "{{ entry['title'] }}"?</p>
+<p>Are you sure you want to delete this entry?</p>
 <p>{{ entry['content'] }}</p>
 
 <form method="POST">
-    <button type="submit">Delete</button>
-    <a href="{{ url_for('dashboard') }}">Cancel</a>
+    <button type="submit" class="btn btn-danger">ConfirmDelete</button>
+ <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
 </form>
 
 {% endblock %}
