@@ -31,3 +31,6 @@ button {
 .error {
     color: red;
 }
+#bn {
+    background-color: rgb(92, 19, 209);
+}
