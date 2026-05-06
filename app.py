@@ -140,7 +140,15 @@ def create():
 def edit(id):
     if "user" not in session:
         return redirect(url_for("login"))
+
+    conn = get_db()
+    entry = conn.execute(
+        "SELECT * FROM entries WHERE id=? AND user=?",
+        (id, session["user"])
+    ).fetchone()
+
     if not entry:
+        conn.close()
         return "Not allowed"
 
     if request.method == "POST":
@@ -148,11 +156,11 @@ def edit(id):
         content = request.form["content"].strip()
 
         if not title or not content:
-            error = "fields cannot be empty"
+            error = "Fields cannot be empty"
         else:
             try:
                 conn.execute(
-                    "UPDATE entries SET title=?, content=? WHERE id=?"
+                    "UPDATE entries SET title=?, content=? WHERE id=?",
                     (title, content, id)
                 )
                 conn.commit()
@@ -161,7 +169,8 @@ def edit(id):
             except:
                 conn.rollback()
                 conn.close()
-                return "error updating entry"
+                return "Error updating entry"
+
     conn.close()
     return render_template("edit.html", entry=entry)
 
