@@ -19,6 +19,7 @@ def init_db():
             title TEXT,
             content TEXT,
             user TEXT
+            
         )
     """)
     
