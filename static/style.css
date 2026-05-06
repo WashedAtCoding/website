@@ -8,10 +8,11 @@ body {
     height: 100vh;
 }
 .card {
-    background: white;
+    background: rgba(92, 19, 209, 0.637);
     padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border-radius: 50px;
+    border-color:black;
+    box-shadow: 0 50px 50px rgba(0,0,0,0.1);
     width: 300px;
     text-align: center;
 }
