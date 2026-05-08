@@ -79,8 +79,14 @@ def register():
 @app.route("/prefrences", methods=["GET", "POST"])
 def prefrences():
     if request.method == "POST":
-        return redirect(url_for("dashboard"))
+        return redirect(url_for("genres"))
     return render_template("prefrences.html")
+
+@app.route("/genres", methods=["GET", "POST"])
+def genres():
+    if request.method == "POST":
+        return redirect(url_for("dashboard"))
+    return render_template("genres.html")
 
 @app.route("/dashboard")
 def dashboard():
