@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Edit Entry</h2>
+<h2>Edit Comment</h2>
 
 <form method="POST">
-    <input name="title" value="{{ entry['title'] }}" placeholder="Title"><br>
-    <textarea name="content" placeholder="Content">{{ entry['content'] }}</textarea><br>
+    <input name="title" value="{{ comment['title'] }}" placeholder="Title"><br>
+    <textarea name="content" placeholder="Content">{{ comment['content'] }}</textarea><br>
     <button type="submit">Save</button>
 </form>
 

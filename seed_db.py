@@ -25,10 +25,10 @@ def seed_database():
         ("bob", "SecurePass456@"),
         ("charlie", "MyPassword789#"),
     ]
-    sample_entries = [
-        ("shood", "Password123!"),
-        ("youtyotu", "SecurePass456@"),
-        ("rpin", "MyPassword789#"),
+    sample_comments = [
+        ("First Comment", "This is the first global comment."),
+        ("Another Comment", "Everyone can see this."),
+        ("Third Comment", "Global comments are fun!"),
     ]
     
     try:
@@ -40,13 +40,12 @@ def seed_database():
             )
             print(f"Created user: {username}")
         
-        for title, content in sample_entries:
-            hashed_pw = bcrypt.hashpw(content.encode("utf-8"), bcrypt.gensalt())
+        for title, content in sample_comments:
             conn.execute(
-                "INSERT INTO entries (title, content) VALUES (?, ?)",
-                (title, hashed_pw)
+                "INSERT INTO comments (title, content) VALUES (?, ?)",
+                (title, content)
             )
-            print(f"Created entry: {title}")
+            print(f"Created comment: {title}")
         
         conn.commit()
         print("\nDatabase seeding complete!")

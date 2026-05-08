@@ -93,12 +93,11 @@ def dashboard():
     if "user" not in session:
         return redirect(url_for("login"))
     conn = get_db()
-    entries = conn.execute(
-        "SELECT * FROM entries WHERE user=?",
-        (session["user"],)
+    comments = conn.execute(
+        "SELECT * FROM comments"
     ).fetchall()
     conn.close()
-    return render_template("dashboard.html", entries=entries, username=session["user"])
+    return render_template("dashboard.html", comments=comments, username=session["user"])
 
 
 # ---------- CREATE ----------
@@ -121,13 +120,12 @@ def create():
 
         # TODO: conn = get_db()
         conn = get_db()
-        # TODO: Insert into entries table
-        # IMPORTANT: include session["user"]
+        # TODO: Insert into comments table
         try:
 
             conn.execute(
-                "INSERT INTO entries (title, content, user) VALUES (?, ?, ?)",
-                (title, content, session["user"])
+                "INSERT INTO comments (title, content) VALUES (?, ?)",
+                (title, content)
             )
             conn.commit()
         finally:
@@ -153,14 +151,14 @@ def edit(id):
         return redirect(url_for("login"))
 
     conn = get_db()
-    entry = conn.execute(
-        "SELECT * FROM entries WHERE id=? AND user=?",
-        (id, session["user"])
+    comment = conn.execute(
+        "SELECT * FROM comments WHERE id=?",
+        (id,)
     ).fetchone()
 
-    if not entry:
+    if not comment:
         conn.close()
-        return "Not allowed"
+        return "Comment not found"
 
     if request.method == "POST":
         title = request.form["title"].strip()
@@ -171,7 +169,7 @@ def edit(id):
         else:
             try:
                 conn.execute(
-                    "UPDATE entries SET title=?, content=? WHERE id=?",
+                    "UPDATE comments SET title=?, content=? WHERE id=?",
                     (title, content, id)
                 )
                 conn.commit()
@@ -180,10 +178,10 @@ def edit(id):
             except:
                 conn.rollback()
                 conn.close()
-                return "Error updating entry"
+                return "Error updating comment"
 
     conn.close()
-    return render_template("edit.html", entry=entry)
+    return render_template("edit.html", comment=comment)
 
 # ---------- DELETE ----------
 # TODO: Create a route like /delete/<id>
@@ -198,21 +196,21 @@ def delete(id):
         return redirect(url_for("login"))
 
     conn = get_db()
-    entry = conn.execute(
-        "SELECT * FROM entries WHERE id=? AND user=?",
-        (id, session["user"])
+    comment = conn.execute(
+        "SELECT * FROM comments WHERE id=?",
+        (id,)
     ).fetchone()
     conn.close()
 
-    if not entry:
-        return "Entry not found or not authorized", 404
+    if not comment:
+        return "Comment not found", 404
 
     if request.method == "POST":
         conn = get_db()
         try:
             conn.execute(
-                "DELETE FROM entries WHERE id=? AND user=?",
-                (id, session["user"])
+                "DELETE FROM comments WHERE id=?",
+                (id,)
             )
             conn.commit()
         finally:
@@ -220,7 +218,7 @@ def delete(id):
 
         return redirect(url_for("dashboard"))
 
-    return render_template("delete.html", entry=entry)
+    return render_template("delete.html", comment=comment)
 
 
 @app.route("/logout")

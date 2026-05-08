@@ -8,21 +8,21 @@
 
 <h3>Welcome, {{ username }}!</h3>
 
-<a href="/create">Create New Entry</a>
+<a href="/create">Create New Comment</a>
 <br><br>
 
-{% if entries %}
-    {% for entry in entries %}
+{% if comments %}
+    {% for comment in comments %}
         <div>
-            <h3>{{ entry['title'] }}</h3>
-            <p>{{ entry['content'] }}</p>
-            <a href="/edit/{{ entry['id'] }}">Edit</a>
-            <a href="/delete/{{ entry['id'] }}">Delete</a>
+            <h3>{{ comment['title'] }}</h3>
+            <p>{{ comment['content'] }}</p>
+            <a href="/edit/{{ comment['id'] }}">Edit</a>
+            <a href="/delete/{{ comment['id'] }}">Delete</a>
         </div>
         <hr>
     {% endfor %}
 {% else %}
-    <p>No entries yet!</p>
+    <p>No comments yet!</p>
 {% endif %}
 
 <br>
