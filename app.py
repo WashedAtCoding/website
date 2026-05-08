@@ -66,7 +66,7 @@ def register():
                 )
                 conn.commit()
 
-                return redirect(url_for("login"))
+                return redirect(url_for("prefrences"))
             except:
                 conn.rollback()
                 error = "Username already exists or error occurred"
@@ -74,6 +74,10 @@ def register():
                 conn.close()
 
     return render_template("register.html", error=error)
+
+@app.route("/prefrences")
+def prefrences():
+    return render_template("prefrences.html")
 
 @app.route("/dashboard")
 def dashboard():
