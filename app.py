@@ -65,6 +65,7 @@ def register():
                     (username, hashed_pw)
                 )
                 conn.commit()
+                session["user"] = username
 
                 return redirect(url_for("prefrences"))
             except:
@@ -75,14 +76,14 @@ def register():
 
     return render_template("register.html", error=error)
 
-@app.route("/prefrences")
+@app.route("/prefrences", methods=["GET", "POST"])
 def prefrences():
+    if request.method == "POST":
+        return redirect(url_for("dashboard"))
     return render_template("prefrences.html")
 
 @app.route("/dashboard")
 def dashboard():
-
-
     if "user" not in session:
         return redirect(url_for("login"))
     conn = get_db()
