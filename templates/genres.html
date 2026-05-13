@@ -3,12 +3,14 @@
 {% block content %}
 <h3>Select Your Favorite Genres:</h3>
 <form method="POST">
-  <label><input type="checkbox" name="interests" value="Action"> Action</label><br>
-  <label><input type="checkbox" name="interests" value="RPG"> RPG</label><br>
-  <label><input type="checkbox" name="interests" value="Idle"> Idle</label><br>
-  <label><input type="checkbox" name="interests" value="Shooter"> Shooter</label><br>
-  <label><input type="checkbox" name="interests" value="Strategy"> Strategy</label><br>
-  <label><input type="checkbox" name="interests" value="Party"> Party</label><br>
+  <div class="option-grid">
+    <label class="option-card"><input type="checkbox" name="genres" value="Action"> Action</label>
+    <label class="option-card"><input type="checkbox" name="genres" value="RPG"> RPG</label>
+    <label class="option-card"><input type="checkbox" name="genres" value="Idle"> Idle</label>
+    <label class="option-card"><input type="checkbox" name="genres" value="Shooter"> Shooter</label>
+    <label class="option-card"><input type="checkbox" name="genres" value="Strategy"> Strategy</label>
+    <label class="option-card"><input type="checkbox" name="genres" value="Party"> Party</label>
+  </div>
   <button type="submit">Confirm</button>
 </form>
 {% endblock %}

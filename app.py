@@ -21,63 +21,95 @@ def is_valid_password(password):
         re.search(r"[^A-Za-z0-9]", password)
     )
 
-def get_platform_suggestions(platforms):
-    suggestions = []
-    platform_games = {
-        "Nintendo Switch": [
-            {
-                "title": "The Legend of Zelda: Breath of the Wild",
-                "description": "Explore a vast open world, solve puzzles, and battle enemies in a beautiful fantasy adventure."
-            },
-            {
-                "title": "Super Mario Odyssey",
-                "description": "Join Mario on a globe-trotting 3D platformer full of creative levels and charming challenges."
-            }
-        ],
-        "Oculus Quest": [
-            {
-                "title": "Beat Saber",
-                "description": "Slash through neon blocks to the beat in this immersive VR rhythm game."
-            },
-            {
-                "title": "Superhot VR",
-                "description": "Time moves only when you move, creating thrilling slow-motion combat puzzles."
-            }
-        ],
-        "Steam": [
-            {
-                "title": "Hades",
-                "description": "Fight your way out of the Underworld in a fast-paced action roguelike with deep storytelling."
-            },
-            {
-                "title": "Stardew Valley",
-                "description": "Build a farm, make friends, and explore a relaxing pixel-art world at your own pace."
-            }
-        ],
-        "Xbox": [
-            {
-                "title": "Forza Horizon 5",
-                "description": "Drive across a breathtaking open-world Mexico in this thrilling, festival-style racing game."
-            },
-            {
-                "title": "Halo Infinite",
-                "description": "Return to the Master Chief story with epic sci-fi combat and large-scale multiplayer."
-            }
-        ],
-        "Playstation": [
-            {
-                "title": "God of War",
-                "description": "Experience a cinematic action-adventure with Kratos and his son on a journey through Norse mythology."
-            },
-            {
-                "title": "Marvel's Spider-Man: Miles Morales",
-                "description": "Swing through New York City as Miles Morales in a vibrant superhero action game."
-            }
-        ]
-    }
 
-    for platform in platforms:
-        suggestions.extend(platform_games.get(platform, []))
+def get_game_suggestions(platforms, genres):
+    catalog = [
+        {
+            "title": "The Legend of Zelda: Breath of the Wild",
+            "description": "Explore a vast open world, solve puzzles, and battle enemies in a beautiful fantasy adventure.",
+            "platforms": ["Nintendo Switch"],
+            "genres": ["Action", "RPG"]
+        },
+        {
+            "title": "Super Mario Odyssey",
+            "description": "Join Mario on a globe-trotting 3D platformer full of creative levels and charming challenges.",
+            "platforms": ["Nintendo Switch"],
+            "genres": ["Action", "Party"]
+        },
+        {
+            "title": "Beat Saber",
+            "description": "Slash through neon blocks to the beat in this immersive VR rhythm game.",
+            "platforms": ["Oculus Quest"],
+            "genres": ["Action"]
+        },
+        {
+            "title": "Superhot VR",
+            "description": "Time moves only when you move, creating thrilling slow-motion combat puzzles.",
+            "platforms": ["Oculus Quest"],
+            "genres": ["Shooter", "Action"]
+        },
+        {
+            "title": "Hades",
+            "description": "Fight your way out of the Underworld in a fast-paced action roguelike with deep storytelling.",
+            "platforms": ["Steam"],
+            "genres": ["Action", "RPG"]
+        },
+        {
+            "title": "Stardew Valley",
+            "description": "Build a farm, make friends, and explore a relaxing pixel-art world at your own pace.",
+            "platforms": ["Steam"],
+            "genres": ["RPG", "Strategy"]
+        },
+        {
+            "title": "Forza Horizon 5",
+            "description": "Drive across a breathtaking open-world Mexico in this thrilling racing game.",
+            "platforms": ["Xbox"],
+            "genres": ["Action"]
+        },
+        {
+            "title": "Halo Infinite",
+            "description": "Return to the Master Chief story with epic sci-fi combat and large-scale multiplayer.",
+            "platforms": ["Xbox"],
+            "genres": ["Shooter"]
+        },
+        {
+            "title": "God of War",
+            "description": "Experience a cinematic action-adventure with Kratos and his son on a journey through Norse mythology.",
+            "platforms": ["Playstation"],
+            "genres": ["Action", "RPG"]
+        },
+        {
+            "title": "Marvel's Spider-Man: Miles Morales",
+            "description": "Swing through New York City as Miles Morales in a vibrant superhero action game.",
+            "platforms": ["Playstation"],
+            "genres": ["Action"]
+        },
+        {
+            "title": "Civilization VI",
+            "description": "Lead a civilization from ancient times to the modern era using diplomacy and strategy.",
+            "platforms": ["Steam", "Xbox"],
+            "genres": ["Strategy"]
+        },
+        {
+            "title": "Mario Party Superstars",
+            "description": "Play classic mini-games with friends in a party board game for Nintendo Switch.",
+            "platforms": ["Nintendo Switch"],
+            "genres": ["Party"]
+        },
+        {
+            "title": "Jackbox Party Pack 10",
+            "description": "Enjoy hilarious multiplayer trivia and drawing games with local or remote friends.",
+            "platforms": ["Steam"],
+            "genres": ["Party"]
+        }
+    ]
+
+    suggestions = []
+    for game in catalog:
+        match_platform = any(platform in game["platforms"] for platform in platforms)
+        match_genre = any(genre in game["genres"] for genre in genres)
+        if match_platform or match_genre:
+            suggestions.append(game)
 
     return suggestions
 
@@ -139,7 +171,7 @@ def register():
 @app.route("/prefrences", methods=["GET", "POST"])
 def prefrences():
     if request.method == "POST":
-        selected_platforms = request.form.getlist("interests")
+        selected_platforms = request.form.getlist("platforms")
         session["preferred_platforms"] = selected_platforms
         return redirect(url_for("genres"))
     return render_template("prefrences.html")
@@ -147,6 +179,8 @@ def prefrences():
 @app.route("/genres", methods=["GET", "POST"])
 def genres():
     if request.method == "POST":
+        selected_genres = request.form.getlist("genres")
+        session["preferred_genres"] = selected_genres
         return redirect(url_for("dashboard"))
     return render_template("genres.html")
 
@@ -160,13 +194,15 @@ def dashboard():
     ).fetchall()
     conn.close()
     preferred_platforms = session.get("preferred_platforms", [])
-    suggestions = get_platform_suggestions(preferred_platforms) if preferred_platforms else []
+    preferred_genres = session.get("preferred_genres", [])
+    suggestions = get_game_suggestions(preferred_platforms, preferred_genres)
     return render_template(
         "dashboard.html",
         comments=comments,
         username=session["user"],
         suggestions=suggestions,
-        preferred_platforms=preferred_platforms
+        preferred_platforms=preferred_platforms,
+        preferred_genres=preferred_genres
     )
 
 

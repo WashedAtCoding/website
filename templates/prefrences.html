@@ -3,11 +3,13 @@
 {% block content %}
 <h3>Select your consoles:</h3>
 <form method="POST">
-  <label><input type="checkbox" name="interests" value="Steam"> Steam</label><br>
-  <label><input type="checkbox" name="interests" value="Xbox"> Xbox</label><br>
-  <label><input type="checkbox" name="interests" value="Nintendo Switch"> Nintendo Switch</label><br>
-  <label><input type="checkbox" name="interests" value="Playstation"> Playstation</label><br>
-  <label><input type="checkbox" name="interests" value="Oculus Quest"> Oculus Quest</label><br>
+  <div class="option-grid">
+    <label class="option-card"><input type="checkbox" name="platforms" value="Steam"> Steam</label>
+    <label class="option-card"><input type="checkbox" name="platforms" value="Xbox"> Xbox</label>
+    <label class="option-card"><input type="checkbox" name="platforms" value="Nintendo Switch"> Nintendo Switch</label>
+    <label class="option-card"><input type="checkbox" name="platforms" value="Playstation"> Playstation</label>
+    <label class="option-card"><input type="checkbox" name="platforms" value="Oculus Quest"> Oculus Quest</label>
+  </div>
   <button type="submit">Confirm</button>
 </form>
 {% endblock %}
