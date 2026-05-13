@@ -21,6 +21,66 @@ def is_valid_password(password):
         re.search(r"[^A-Za-z0-9]", password)
     )
 
+def get_platform_suggestions(platforms):
+    suggestions = []
+    platform_games = {
+        "Nintendo Switch": [
+            {
+                "title": "The Legend of Zelda: Breath of the Wild",
+                "description": "Explore a vast open world, solve puzzles, and battle enemies in a beautiful fantasy adventure."
+            },
+            {
+                "title": "Super Mario Odyssey",
+                "description": "Join Mario on a globe-trotting 3D platformer full of creative levels and charming challenges."
+            }
+        ],
+        "Oculus Quest": [
+            {
+                "title": "Beat Saber",
+                "description": "Slash through neon blocks to the beat in this immersive VR rhythm game."
+            },
+            {
+                "title": "Superhot VR",
+                "description": "Time moves only when you move, creating thrilling slow-motion combat puzzles."
+            }
+        ],
+        "Steam": [
+            {
+                "title": "Hades",
+                "description": "Fight your way out of the Underworld in a fast-paced action roguelike with deep storytelling."
+            },
+            {
+                "title": "Stardew Valley",
+                "description": "Build a farm, make friends, and explore a relaxing pixel-art world at your own pace."
+            }
+        ],
+        "Xbox": [
+            {
+                "title": "Forza Horizon 5",
+                "description": "Drive across a breathtaking open-world Mexico in this thrilling, festival-style racing game."
+            },
+            {
+                "title": "Halo Infinite",
+                "description": "Return to the Master Chief story with epic sci-fi combat and large-scale multiplayer."
+            }
+        ],
+        "Playstation": [
+            {
+                "title": "God of War",
+                "description": "Experience a cinematic action-adventure with Kratos and his son on a journey through Norse mythology."
+            },
+            {
+                "title": "Marvel's Spider-Man: Miles Morales",
+                "description": "Swing through New York City as Miles Morales in a vibrant superhero action game."
+            }
+        ]
+    }
+
+    for platform in platforms:
+        suggestions.extend(platform_games.get(platform, []))
+
+    return suggestions
+
 # ---------- ROUTES ----------
 @app.route("/", methods=["GET", "POST"])
 def login():
@@ -79,6 +139,8 @@ def register():
 @app.route("/prefrences", methods=["GET", "POST"])
 def prefrences():
     if request.method == "POST":
+        selected_platforms = request.form.getlist("interests")
+        session["preferred_platforms"] = selected_platforms
         return redirect(url_for("genres"))
     return render_template("prefrences.html")
 
@@ -97,7 +159,15 @@ def dashboard():
         "SELECT * FROM comments"
     ).fetchall()
     conn.close()
-    return render_template("dashboard.html", comments=comments, username=session["user"])
+    preferred_platforms = session.get("preferred_platforms", [])
+    suggestions = get_platform_suggestions(preferred_platforms) if preferred_platforms else []
+    return render_template(
+        "dashboard.html",
+        comments=comments,
+        username=session["user"],
+        suggestions=suggestions,
+        preferred_platforms=preferred_platforms
+    )
 
 
 # ---------- CREATE ----------

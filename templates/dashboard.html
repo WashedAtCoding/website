@@ -11,6 +11,17 @@
 <a href="/create">Create New Comment</a>
 <br><br>
 
+{% if preferred_platforms %}
+    <h3>Recommended games for {{ preferred_platforms | join(', ') }}:</h3>
+    {% for game in suggestions %}
+        <div>
+            <strong>{{ game.title }}</strong>
+            <p>{{ game.description }}</p>
+        </div>
+    {% endfor %}
+    <hr>
+{% endif %}
+
 {% if comments %}
     {% for comment in comments %}
         <div>
