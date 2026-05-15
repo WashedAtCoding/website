@@ -4,12 +4,12 @@
 <h3>Select Your Favorite Genres:</h3>
 <form method="POST">
   <div class="option-grid">
-    <label class="option-card"><input type="checkbox" name="genres" value="Action"> Action</label>
-    <label class="option-card"><input type="checkbox" name="genres" value="RPG"> RPG</label>
-    <label class="option-card"><input type="checkbox" name="genres" value="Idle"> Idle</label>
-    <label class="option-card"><input type="checkbox" name="genres" value="Shooter"> Shooter</label>
-    <label class="option-card"><input type="checkbox" name="genres" value="Strategy"> Strategy</label>
-    <label class="option-card"><input type="checkbox" name="genres" value="Party"> Party</label>
+    <label class="option-card"><input type="checkbox" name="genres" value="Action" {% if 'Action' in selected_genres %}checked{% endif %}> Action</label>
+    <label class="option-card"><input type="checkbox" name="genres" value="RPG" {% if 'RPG' in selected_genres %}checked{% endif %}> RPG</label>
+    <label class="option-card"><input type="checkbox" name="genres" value="Idle" {% if 'Idle' in selected_genres %}checked{% endif %}> Idle</label>
+    <label class="option-card"><input type="checkbox" name="genres" value="Shooter" {% if 'Shooter' in selected_genres %}checked{% endif %}> Shooter</label>
+    <label class="option-card"><input type="checkbox" name="genres" value="Strategy" {% if 'Strategy' in selected_genres %}checked{% endif %}> Strategy</label>
+    <label class="option-card"><input type="checkbox" name="genres" value="Party" {% if 'Party' in selected_genres %}checked{% endif %}> Party</label>
   </div>
   <button type="submit">Confirm</button>
 </form>

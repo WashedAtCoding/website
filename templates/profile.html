@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Your Profile</h2>
+
+<div class="profile-section">
+    <h3>Favorite Genres</h3>
+    {% if selected_genres %}
+        <div class="profile-tags">
+        {% for genre in selected_genres %}
+            <span class="tag">{{ genre }}</span>
+        {% endfor %}
+        </div>
+    {% else %}
+        <p>No genres selected yet.</p>
+    {% endif %}
+    <a href="{{ url_for('edit_genres') }}" class="btn">Edit Genres</a>
+</div>
+
+<div class="profile-section">
+    <h3>Preferred Consoles</h3>
+    {% if selected_platforms %}
+        <div class="profile-tags">
+        {% for platform in selected_platforms %}
+            <span class="tag">{{ platform }}</span>
+        {% endfor %}
+        </div>
+    {% else %}
+        <p>No consoles selected yet.</p>
+    {% endif %}
+    <a href="{{ url_for('edit_platforms') }}" class="btn">Edit Consoles</a>
+</div>
+
+<div class="profile-section">
+    <a href="{{ url_for('dashboard') }}" class="btn">Back to Dashboard</a>
+</div>
+{% endblock %}

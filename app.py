@@ -174,7 +174,8 @@ def prefrences():
         selected_platforms = request.form.getlist("platforms")
         session["preferred_platforms"] = selected_platforms
         return redirect(url_for("genres"))
-    return render_template("prefrences.html")
+    selected_platforms = session.get("preferred_platforms", [])
+    return render_template("prefrences.html", selected_platforms=selected_platforms)
 
 @app.route("/genres", methods=["GET", "POST"])
 def genres():
@@ -182,7 +183,38 @@ def genres():
         selected_genres = request.form.getlist("genres")
         session["preferred_genres"] = selected_genres
         return redirect(url_for("dashboard"))
-    return render_template("genres.html")
+    selected_genres = session.get("preferred_genres", [])
+    return render_template("genres.html", selected_genres=selected_genres)
+
+@app.route("/profile")
+def profile():
+    if "user" not in session:
+        return redirect(url_for("login"))
+    selected_platforms = session.get("preferred_platforms", [])
+    selected_genres = session.get("preferred_genres", [])
+    return render_template("profile.html", selected_platforms=selected_platforms, selected_genres=selected_genres)
+
+@app.route("/edit_platforms", methods=["GET", "POST"])
+def edit_platforms():
+    if "user" not in session:
+        return redirect(url_for("login"))
+    if request.method == "POST":
+        selected_platforms = request.form.getlist("platforms")
+        session["preferred_platforms"] = selected_platforms
+        return redirect(url_for("profile"))
+    selected_platforms = session.get("preferred_platforms", [])
+    return render_template("prefrences.html", selected_platforms=selected_platforms)
+
+@app.route("/edit_genres", methods=["GET", "POST"])
+def edit_genres():
+    if "user" not in session:
+        return redirect(url_for("login"))
+    if request.method == "POST":
+        selected_genres = request.form.getlist("genres")
+        session["preferred_genres"] = selected_genres
+        return redirect(url_for("profile"))
+    selected_genres = session.get("preferred_genres", [])
+    return render_template("genres.html", selected_genres=selected_genres)
 
 @app.route("/dashboard")
 def dashboard():

@@ -4,11 +4,11 @@
 <h3>Select your consoles:</h3>
 <form method="POST">
   <div class="option-grid">
-    <label class="option-card"><input type="checkbox" name="platforms" value="Steam"> Steam</label>
-    <label class="option-card"><input type="checkbox" name="platforms" value="Xbox"> Xbox</label>
-    <label class="option-card"><input type="checkbox" name="platforms" value="Nintendo Switch"> Nintendo Switch</label>
-    <label class="option-card"><input type="checkbox" name="platforms" value="Playstation"> Playstation</label>
-    <label class="option-card"><input type="checkbox" name="platforms" value="Oculus Quest"> Oculus Quest</label>
+    <label class="option-card"><input type="checkbox" name="platforms" value="Steam" {% if 'Steam' in selected_platforms %}checked{% endif %}> Steam</label>
+    <label class="option-card"><input type="checkbox" name="platforms" value="Xbox" {% if 'Xbox' in selected_platforms %}checked{% endif %}> Xbox</label>
+    <label class="option-card"><input type="checkbox" name="platforms" value="Nintendo Switch" {% if 'Nintendo Switch' in selected_platforms %}checked{% endif %}> Nintendo Switch</label>
+    <label class="option-card"><input type="checkbox" name="platforms" value="Playstation" {% if 'Playstation' in selected_platforms %}checked{% endif %}> Playstation</label>
+    <label class="option-card"><input type="checkbox" name="platforms" value="Oculus Quest" {% if 'Oculus Quest' in selected_platforms %}checked{% endif %}> Oculus Quest</label>
   </div>
   <button type="submit">Confirm</button>
 </form>

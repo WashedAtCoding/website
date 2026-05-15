@@ -5,6 +5,12 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <div class="navbar">
+        {% if session.get('user') %}
+            <a href="{{ url_for('profile') }}" class="profile-btn">Profile</a>
+            <span class="username">{{ session.get('user') }}</span>
+        {% endif %}
+    </div>
     <div class="card">
         {% block content %}{% endblock %}
     </div>
