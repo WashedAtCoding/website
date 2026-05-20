@@ -5,7 +5,7 @@ Authors: Dawson Eagleson and Jacob Taylor
 
 To run the code type these commands in a linux terminal:
 
---`pip install flask`--
---`pip install bcrypt`--
+`pip install flask`
+`pip install bcrypt`
 
---`Python3 app.py`--
+`Python3 app.py`
