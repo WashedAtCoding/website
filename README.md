@@ -1,12 +1,11 @@
-# Coding I – Web Application Project
+Flask Web Application 
 
 Authors: Dawson Eagleson and Jacob Taylor
-* https://drive.google.com/file/d/1lgmLr5vW1eWxdZzzASFeVCECx6gqsZiZ/view?usp=sharing
+[Application demo[ (https://drive.google.com/file/d/1lgmLr5vW1eWxdZzzASFeVCECx6gqsZiZ/view?usp=sharing)
 
-to run the code type this in the terminal
+To run the code type these commands in a linux terminal:
 
-Pip install flask
+--`pip install flask`--
+--`pip install bcrypt`--
 
-Pip install bcrypt
-
-Python3 app.py
+--`Python3 app.py`--
