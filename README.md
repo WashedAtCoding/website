@@ -1,6 +1,6 @@
 Flask Web Application 
 
-Authors: Dawson Eagleson and Jacob Taylor
+Authors: Dawson Eagleson and Jacob Taylor<br>
 [Application demo](https://drive.google.com/file/d/1lgmLr5vW1eWxdZzzASFeVCECx6gqsZiZ/view?usp=sharing)
 
 To run the code type these commands in a linux terminal:
